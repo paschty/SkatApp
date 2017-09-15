@@ -7,7 +7,6 @@ namespace SkatApp {
         }
 
         private template: JQuery = this.buildTemplate("game_edit");
-        private isNew: boolean = false;
         private editedGame: Game;
         private currentRamsch: boolean = false;
 
@@ -42,61 +41,78 @@ namespace SkatApp {
 
             selects.material_select('destroy');
 
-
+            let index = null;
             if (currentArguments.length > 0) {
-                var index = ((<any>currentArguments[ 0 ]) * 1);
+                index = ((<any>currentArguments[ 0 ]) * 1);
                 model.currentGame = model.localGames.get(index);
-                this.isNew = false;
             } else {
                 model.currentGame = this.createNewGame();
-                this.isNew = true;
             }
-            jQuery()
+
+            let gui = jQuery()
                 .add(this.getGameLevelElement())
                 .add(this.getJacksElement())
                 .add(this.getAnnouncementElement())
                 .add(this.getHandElement())
                 .add(this.getWonElement())
                 .add(this.getGameTypeElement())
-                .add(this.getGamePointsElement())
-                .change(()=> {
-                    this.updateGamePoints();
-                });
+                .add(this.getGamePointsElement());
 
-            this.getBidElement().change(()=> {
-                this.updateGameLevel();
-                let onRamschHideElements = jQuery()
-                    .add(this.getHandElement().parent().parent())
-                    .add(this.getGameTypeElement().parent().parent().parent())
-                    .add(this.getAnnouncementElement().parent().parent().parent())
-                    .add(this.getJacksElement().parent().parent().parent())
-                    .add(this.getWonElement().parent().parent());
+            let updateGUI=() => {
+                // show all
+                gui.closest(".row").show();
+                this.updateGameLevel(this.getGameLevelElement().val());
 
-                let onRamschShoWElements = jQuery().add(this.getGamePointsElement().parent().parent());
-                if(this.getBidElement().val() == "0"){
-                    onRamschHideElements.hide();
-                    onRamschShoWElements.show();
+                // ramsch
+                if(this.getBidElement().val() == 0) {
+                     jQuery()
+                        .add(this.getHandElement().closest(".row"))
+                        .add(this.getGameTypeElement().closest(".row"))
+                        .add(this.getAnnouncementElement().closest(".row"))
+                        .add(this.getJacksElement().closest(".row"))
+                        .add(this.getWonElement().closest(".row"))
+                        .hide();
+                     //if(this.getGameLevelElement().val() != 2) {
+                         jQuery().add(this.getGamePointsElement().closest(".row")).show();
+                     /*} else {
+                         jQuery().add(this.getGamePointsElement().closest(".row")).hide();
+                     }*/
                 } else {
-                    onRamschHideElements.show();
-                    onRamschShoWElements.hide();
+                    jQuery().add(this.getGamePointsElement().closest(".row")).hide();
                 }
-            });
 
-            this.getHandElement().change(()=> {
-                this.updateGameLevel();
-            });
+                // null
+                let gameType = this.getGameTypeElement().val();
+                if(["23", "35", "46", "59"].indexOf(gameType) >= 0) {
+                    jQuery()
+                        .add(this.getHandElement().closest(".row"))
+                        .add(this.getGameLevelElement().closest(".row"))
+                        .add(this.getJacksElement().closest(".row"))
+                        .hide();
+                }
+            };
 
-            this.updateGameLevel();
+            jQuery()
+                .add(this.getBidElement())
+                .add(this.getGameTypeElement())
+                .add(this.getHandElement())
+                //.add(this.getGameLevelElement())
+                .change(updateGUI);
+
             this.model2View(model);
+            updateGUI();
             this.updateGamePoints();
             console.log(model.currentGame);
             selects.material_select();
 
+            gui.change(() => {
+                this.updateGamePoints();
+            });
 
             this.getSaveGameButton().click(()=>{
                 let game = this.gameFromView();
 
-                if(this.isNew){
+                if(index == null){
                     this.getModel().localGames.add(game);
                 } else {
                     this.getModel().localGames.remove(index);
@@ -119,7 +135,7 @@ namespace SkatApp {
                 .add(this.getSaveGameButton()).unbind();
         }
 
-        private updateGameLevel() {
+        private updateGameLevel(gameLevel:number) {
             let bid = parseInt(this.getBidElement().val(), 10);
             let gameLevelElement = this.getGameLevelElement();
             if (!this.currentRamsch && bid == 0) {
@@ -130,6 +146,9 @@ namespace SkatApp {
                 } else {
                     this.fillGameLevel(gameLevelElement, this.gameLevelNormal);
                 }
+            }
+            if(this.getGameLevelElement().find(`[value=${gameLevel}]`).val() != null) {
+                this.getGameLevelElement().val(gameLevel);
             }
         }
 
@@ -156,8 +175,6 @@ namespace SkatApp {
                 jQuery("<option/>").text(group).attr("value", group).appendTo(groupSelect);
             });
             groupSelect.val(currentGame.group);
-
-
             this.getBidElement().val(currentGame.bid);
 
             let playerSelect = this.getPlayerElement();
@@ -170,9 +187,11 @@ namespace SkatApp {
             this.getHandElement().prop("checked", currentGame.hand);
             this.getGameTypeElement().val(currentGame.gameType);
             this.getAnnouncementElement().val(currentGame.announcement);
-            this.getGameLevelElement().val(currentGame.gameLevel);
             this.getJacksElement().val(currentGame.jacks);
+            this.updateGameLevel(currentGame.gameLevel);
+            this.getGamePointsElement().val(currentGame.value);
             this.getWonElement().prop("checked", currentGame.won);
+
             return currentGame;
         }
 
@@ -192,7 +211,9 @@ namespace SkatApp {
                 jacks : parseInt(this.getJacksElement().val(), 10),
                 won : this.getWonElement().prop("checked")
             };
-
+            if(game.bid === 0) {
+                game.won = game.gameLevel > 0;
+            }
             game.value = this.getPoints(game);
             return game;
         }
@@ -238,7 +259,7 @@ namespace SkatApp {
         }
 
         private getPoints(game: Game): number {
-            var gamePoints, gameType = game.gameType;
+            let gamePoints, gameType = game.gameType;
             if (game.bid == 0) {
                 if (game.gameLevel === 2) {
                     // Durchmarsch
@@ -257,7 +278,6 @@ namespace SkatApp {
             if(isNaN(gamePoints)){
                 throw "gamePoints is NaN";
             }
-
             return gamePoints;
         }
 
@@ -274,7 +294,7 @@ namespace SkatApp {
             game.player = this.getModel().players.get(0);
             game.hand = false;
             game.jacks = 1;
-            game.won = false;
+            game.won = true;
 
             return game;
         }

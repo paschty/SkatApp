@@ -256,25 +256,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col s12 ">
-                    <input type="checkbox" class="filled-in" id="hand"/>
-                    <label for="hand">Hand gespielt</label>
-                </div>
-            </div>
-            <div class="row">
                 <div class="input-field col s12">
                     <select id="gameType" class="validate">
                         <option value="9" selected="selected">Schellen</option>
                         <option value="10">Rot</option>
                         <option value="11">Grün</option>
                         <option value="12">Eichel</option>
-                        <option value="23">Null</option>
                         <option value="24">Grand</option>
+                        <option value="23">Null</option>
                         <option value="35">Null Hand</option>
                         <option value="46">Null Ouvert</option>
                         <option value="59">Null Ouvert Hand</option>
                     </select>
                     <label>Spieltyp</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 ">
+                    <input type="checkbox" class="filled-in" id="hand"/>
+                    <label for="hand">Hand gespielt</label>
                 </div>
             </div>
             <div class="row">
@@ -315,17 +315,15 @@
             </div>
             <div class="row">
                 <div class="col s12 ">
-                    <input type="checkbox" class="filled-in" id="won"/>
+                    <input type="checkbox" class="filled-in" id="won" />
                     <label for="won">Gewonnen</label>
                 </div>
             </div>
             <div class="row" style="display: none">
                 <div class="col s12 input-field">
-
-                                  <input placeholder="" id="gamePoints"
-                                         type="number" class="validate"/>
+                    <input placeholder="" id="gamePoints"
+                           type="number" class="validate"/>
                     <label for="gamePoints" class="active">Augen</label>
-
                 </div>
             </div>
             <div class="row">
