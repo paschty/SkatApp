@@ -1,0 +1,26 @@
+.navbar-fixed .nav-wrapper {
+    padding-left: 1em;
+}
+
+.navbar-fixed+*{
+    padding-top: 1em;
+}
+
+.collection .collection-item.lost .wonText{
+    color: red;
+
+}
+
+.collection .collection-item.won .wonText{
+    color: green;
+
+}
+
+.group,.wonText {
+    color: black;
+}
+
+.material-icons {
+    cursor: pointer;
+}
+

@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Skat App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="lib/jquery-2.2.4.min.js"></script>
+    <script src="SkatApp.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script id="main" type="application/xhtml+xml">
+        <section class="page">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="nav-wrapper light-green darken-3">
+                        <div class="col s12">
+                            <a href="#main" class="breadcrumb">Skat App</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="collection">
+                        <a href="#games" class="collection-item"> Spiele </a>
+                        <a href="#players" class="collection-item"> Spieler </a>
+                        <a href="#options" class="collection-item"> Optionen</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </script>
+    <script id="options" type="application/xhtml+xml">
+        <section class="page default">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="nav-wrapper light-green darken-3">
+                        <div class="col s12">
+                            <a href="#main" class="breadcrumb">Skat App</a>
+                            <a href="#options" class="breadcrumb">Optionen</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input placeholder="http://xyz.de/SkatDB" id="skatDB"
+                           type="text" class="validate"/>
+                    <label for="skatDB" class="active">SkatDB</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <a id="test" class="waves-effect waves-light btn light-green darken-3">Test</a>
+                    <a id="save" class="waves-effect waves-light btn light-green darken-3">Speichern</a>
+                </div>
+            </div>
+        </section>
+    </script>
+
+    <script id="players" type="application/xhtml+xml">
+        <section class="page">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="nav-wrapper light-green darken-3">
+                        <div class="col s12">
+                            <a href="#main" class="breadcrumb">Skat App</a>
+                            <a href="#players" class="breadcrumb">Spieler</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <a href="#player_new" class="waves-effect waves-light btn col s12 light-green darken-3">Spieler
+                    hinzufügen</a>
+            </div>
+            <div class="row">
+                <ul id="playerlist" class="collection">
+
+                </ul>
+            </div>
+        </section>
+    </script>
+
+    <script id="player" type="application/xhtml+xml">
+        <li class="collection-item">
+            <span class="title"></span>
+        </li>
+    </script>
+
+    <script id="player_new" type="application/xhtml+xml">
+        <section data-sa-page-id="player_new" class="page">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="nav-wrapper light-green darken-3">
+                        <div class="col s12">
+                            <a href="#main" class="breadcrumb">Skat App</a>
+                            <a href="#players" class="breadcrumb">Spieler</a>
+                            <a href="#player_new" class="breadcrumb">Neuer Spieler</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input placeholder="name" id="newPlayerName"
+                           type="text" class="validate"/>
+                    <label for="newPlayerName" class="active">Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <a id="addPlayer" href="#players"
+                   class="waves-effect waves-light btn col s12 light-green darken-3">Spieler hinzufügen</a>
+            </div>
+        </section>
+    </script>
+
+    <script id="games" type="application/xhtml+xml">
+        <section data-sa-page-id="games" class="page">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="nav-wrapper light-green darken-3">
+                        <div class="col s12">
+                            <a href="#main" class="breadcrumb">Skat App</a>
+                            <a href="#games" class="breadcrumb">Spiele</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <a href="#game_edit" class="waves-effect waves-light btn col s12 light-green darken-3">Spiel
+                    hinzufügen</a>
+            </div>
+            <div class="row">
+                <ul id="gamelist" class="collection">
+
+                </ul>
+            </div>
+        </section>
+    </script>
+
+    <script id="game" type="application/xhtml+xml">
+        <li class="collection-item avatar">
+            <img class="gameImage circle responsive-img"></img>
+            <span class="title"></span>
+            <p class="group"></p>
+            <p class="wonText"></p>
+            <a class="secondary-content">
+                <i class="material-icons edit">mode_edit</i>
+                <i class="material-icons red-text delete">delete</i>
+            </a>
+        </li>
+    </script>
+
+    <script id="game_edit" type="application/xhtml+xml">
+        <section data-sa-page-id="" class="page">
+            <div class="navbar-fixed">
+                <nav>
+                    <div class="nav-wrapper light-green darken-3">
+                        <div class="col s12">
+                            <a href="#main" class="breadcrumb">Skat App</a>
+                            <a href="#games" class="breadcrumb">Spiele</a>
+                            <a href="#game_edit" class="breadcrumb">Spiel bearbeiten</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="group" class="validate">
+                    </select>
+                    <label>Gruppe</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="bid" class="validate">
+                        <option value="0">Ramsch</option>
+                        <option value="18" selected="selected">18</option>
+                        <option value="20">20</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="27">27</option>
+                        <option value="30">30</option>
+                        <option value="33">33</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="40">40</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="48">48</option>
+                        <option value="50">50</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="59">59</option>
+                        <option value="60">60</option>
+                        <option value="63">63</option>
+                        <option value="66">66</option>
+                        <option value="70">70</option>
+                        <option value="72">72</option>
+                        <option value="77">77</option>
+                        <option value="80">80</option>
+                        <option value="81">81</option>
+                        <option value="84">84</option>
+                        <option value="88">88</option>
+                        <option value="90">90</option>
+                        <option value="96">96</option>
+                        <option value="99">99</option>
+                        <option value="100">100</option>
+                        <option value="108">108</option>
+                        <option value="110">110</option>
+                        <option value="117">117</option>
+                        <option value="120">120</option>
+                        <option value="121">121</option>
+                        <option value="126">126</option>
+                        <option value="130">130</option>
+                        <option value="132">132</option>
+                        <option value="135">135</option>
+                        <option value="140">140</option>
+                        <option value="143">143</option>
+                        <option value="144">144</option>
+                        <option value="150">150</option>
+                        <option value="153">153</option>
+                        <option value="154">154</option>
+                        <option value="156">156</option>
+                        <option value="160">160</option>
+                        <option value="162">162</option>
+                        <option value="165">165</option>
+                        <option value="168">168</option>
+                        <option value="170">170</option>
+                        <option value="176">176</option>
+                        <option value="180">180</option>
+                        <option value="187">187</option>
+                        <option value="192">192</option>
+                        <option value="198">198</option>
+                        <option value="204">204</option>
+                        <option value="216">216</option>
+                        <option value="240">240</option>
+                        <option value="264">264</option>
+                    </select>
+                    <label>Reizwert</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="player" class="validate">
+                        <option value="18" selected="selected">18</option>
+                    </select>
+                    <label>Alleinspieler</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 ">
+                    <input type="checkbox" class="filled-in" id="hand"/>
+                    <label for="hand">Hand gespielt</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="gameType" class="validate">
+                        <option value="9" selected="selected">Schellen</option>
+                        <option value="10">Rot</option>
+                        <option value="11">Grün</option>
+                        <option value="12">Eichel</option>
+                        <option value="23">Null</option>
+                        <option value="24">Grand</option>
+                        <option value="35">Null Hand</option>
+                        <option value="46">Null Ouvert</option>
+                        <option value="59">Null Ouvert Hand</option>
+                    </select>
+                    <label>Spieltyp</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="announcement" class="validate">
+                        <option value="1" selected="selected">Keine</option>
+                        <option value="2">Spritze</option>
+                        <option value="4">Reh</option>
+                        <option value="8">Hirsch</option>
+                    </select>
+                    <label>Ansage</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="jacks" class="validate">
+                        <option value="1" selected="selected"> 1</option>
+                        <option value="2"> 2</option>
+                        <option value="3"> 3</option>
+                        <option value="4"> 4</option>
+                        <option value="5"> 5</option>
+                        <option value="6"> 6</option>
+                        <option value="7"> 7</option>
+                        <option value="8"> 8</option>
+                        <option value="9"> 9</option>
+                        <option value="10"> 10</option>
+                        <option value="11"> 11</option>
+                    </select>
+                    <label>Mit/Ohne</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="gameLevel" class="validate">
+                    </select>
+                    <label>Gewinngrad</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 ">
+                    <input type="checkbox" class="filled-in" id="won"/>
+                    <label for="won">Gewonnen</label>
+                </div>
+            </div>
+            <div class="row" style="display: none">
+                <div class="col s12 input-field">
+
+                                  <input placeholder="" id="gamePoints"
+                                         type="number" class="validate"/>
+                    <label for="gamePoints" class="active">Augen</label>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <span id="gamePointsResult"></span>
+                </div>
+            </div>
+            <div class="row">
+                <a id="saveGame" href="#games"
+                   class="waves-effect waves-light btn col s12 light-green darken-3">Spiel Speichern</a>
+            </div>
+        </section>
+    </script>
+</head>
+<body>
+<div id="skatAppMain"></div>
+
+</body>
+</html>

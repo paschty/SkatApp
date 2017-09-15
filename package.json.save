@@ -1,0 +1,10 @@
+xxxxxxx{
+  "name": "skat-app",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Sebastian Hofmann <hofmann.s@uni-jena.de>",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "typescript": "^1.8.10"
+  }
+}

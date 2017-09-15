@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outFile": "SkatApp.js",
+    "sourceMap": false
+  },
+  "files": [
+    "ts/definitions/jquery.d.ts",
+    "ts/Utils.ts",
+    "ts/Model.ts",
+    "ts/Page.ts",
+    "ts/Player.ts",
+    "ts/PlayerNew.ts",
+    "ts/Games.ts",
+    "ts/EditGame.ts",
+    "ts/MainMenu.ts",
+    "ts/OptionMenu.ts",
+    "ts/SkatApp.ts"
+  ]
+}
