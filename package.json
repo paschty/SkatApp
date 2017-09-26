@@ -5,6 +5,7 @@
   "author": "Sebastian Hofmann <hofmann.s@uni-jena.de>",
   "license": "BSD-2-Clause",
   "devDependencies": {
+    "appcache-manifest": "^2.1.0",
     "cpx": "^1.5.0",
     "jquery": "^2.2.4",
     "material-design-icons": "^3.0.1",
@@ -12,11 +13,14 @@
     "typescript": "^1.8.10"
   },
   "scripts": {
-    "postinstall": "npm run copy:jquery && npm run copy:materializejs && npm run copy:materializecss && npm run copy:materializefonts && npm run copy:materialiconsfonts",
+    "postinstall": "npm run copy",
+    "build": "tsc && npm run create:appcache",
+    "copy": "npm run copy:jquery && npm run copy:materializejs && npm run copy:materializecss && npm run copy:materializefonts && npm run copy:materialiconsfonts",
     "copy:jquery": "cpx \"node_modules/jquery/dist/jquery.min.js\" lib/jquery/",
     "copy:materializejs": "cpx \"node_modules/materialize-css/dist/js/materialize.min.js\" lib/materialize/",
     "copy:materializecss": "cpx \"node_modules/materialize-css/dist/css/materialize.min.css\" lib/materialize/",
     "copy:materializefonts": "cpx \"node_modules/materialize-css/dist/fonts/roboto/*\" lib/fonts/roboto/",
-    "copy:materialiconsfonts": "cpx \"node_modules/material-design-icons/iconfont/*\" lib/fonts/material/"
+    "copy:materialiconsfonts": "cpx \"node_modules/material-design-icons/iconfont/*\" lib/fonts/material/",
+    "create:appcache": "appcache-manifest \"./app.html\" \"./SkatApp.js\" \"./style.css\" \"./lib/**/*.{css,js,woff2}\" \"./img/*.svg\" --network-star --prefix -o ./SkatApp.appcache"
   }
 }
