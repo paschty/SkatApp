@@ -1,3 +1,5 @@
+.idea
 node_modules
+lib
 SkatApp.iml
 SkatApp.js
