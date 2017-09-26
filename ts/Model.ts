@@ -26,23 +26,34 @@ namespace SkatApp {
         public groups: SAArrayList<string>;
 
         public localGames: SAArrayList<Game>;
+        public dbGames: SAArrayList<Game>;
         private lastDBUpdate: Date;
         private lastDBPush: Date;
         public currentGame: Game = null;
 
         constructor() {
+            this.init();
+        }
+
+        private init() {
             this.loadSettingsFromStorage();
             this.loadPlayersFromStorage();
             this.loadGamesFromStorage();
+            this.loadDBGamesFromStorage();
             this.loadDBDatesFromStorage();
             this.loadGroupsFromStorage();
 
             let now = new Date();
             if (this.lastDBUpdate.getFullYear() != now.getFullYear() || this.lastDBUpdate.getMonth() != now.getMonth() || this.lastDBUpdate.getDate() != now.getDate()) {
-                this.updatePlayerList();
-                this.updateGameList();
-                this.updateGroups();
+                this.updateFromServer();
+
             }
+        }
+
+        public updateFromServer() {
+            this.updatePlayerList();
+            this.updateGameList();
+            this.updateGroups();
         }
 
         private loadGroupsFromStorage() {
@@ -64,7 +75,7 @@ namespace SkatApp {
             if ((lastDBPush = localStorage.getItem("lastDBPush")) != null) {
                 this.lastDBPush = new Date(parseInt(lastDBPush));
             } else {
-                this.lastDBPush = new Date();
+                this.lastDBPush = new Date(0);
             }
         }
 
@@ -96,6 +107,15 @@ namespace SkatApp {
             }
         }
 
+        private loadDBGamesFromStorage() {
+            let gamesString = localStorage.getItem("dbGames");
+            if (gamesString != null) {
+                this.dbGames = SAArrayList.fromJSON<Game>(gamesString);
+            } else {
+                this.dbGames = new SAArrayList<Game>();
+            }
+        }
+
         public syncGamesToStorage() {
             localStorage.setItem("localGames", this.localGames.toJSON());
         }
@@ -117,54 +137,67 @@ namespace SkatApp {
         }
 
         public updatePlayerList() {
-            jQuery.ajax({
-                url : this.settingsObject.server + "/JSON/players", success : (result: Array<string>)=> {
-                    result.forEach((player)=> {
-                        if (this.players.indexOf(player) == -1) {
-                            this.players.add(player);
-                        }
-                    });
+            if (this.settingsObject.server != null && this.settingsObject.server.length > 0) {
+                jQuery.ajax({
+                    url : this.settingsObject.server + "/JSON/players", success : (result: Array<string>) => {
+                        result.forEach((player) => {
+                            if (this.players.indexOf(player) == -1) {
+                                this.players.add(player);
+                            }
+                        });
 
-                    localStorage.setItem("players", this.players.toJSON());
-                },
-                error : ()=> {
-                    //alert("Fehler beim Herunterladen der Spielerliste!");
-                }
-            });
+                        localStorage.setItem("players", this.players.toJSON());
+                    },
+                    error : () => {
+                        alert("Fehler beim Herunterladen der Spielerliste!");
+                    }
+                });
+            }
         }
 
         public updateGroups() {
-            jQuery.ajax({
-                url : this.settingsObject.server + "/JSON/groups", success : (result: Array<string>)=> {
-                    result.forEach((group)=> {
-                        if (this.groups.indexOf(group) == -1) {
-                            this.groups.add(group);
-                        }
-                    });
+            if (this.settingsObject.server != null && this.settingsObject.server.length > 0) {
+                jQuery.ajax({
+                    url : this.settingsObject.server + "/JSON/groups", success : (result: Array<string>) => {
+                        result.forEach((group) => {
+                            if (this.groups.indexOf(group) == -1) {
+                                this.groups.add(group);
+                            }
+                        });
 
-                    localStorage.setItem("groups", this.groups.toJSON());
-                },
-                error : ()=> {
-                    //alert("Fehler beim Herunterladen der Spielerliste!");
-                }
-            });
+                        localStorage.setItem("groups", this.groups.toJSON());
+                    },
+                    error : () => {
+                        alert("Fehler beim Herunterladen der Gruppenliste!");
+                    }
+                });
+            }
         }
 
         public updateGameList() {
-            /* jQuery.ajax({
-             url : this.settingsObject.server + "/JSON/games", success : (result:Array<Game>)=> {
+            if (this.settingsObject.server != null && this.settingsObject.server.length > 0) {
+                jQuery.ajax({
+                    url : this.settingsObject.server + "/JSON/games", success : (result: Array<Game>) => {
+                        this.dbGames.clear();
+                        result.forEach((game) => {
+                            this.dbGames.add(game);
+                        });
 
-             this.dbGames.clear();
-             result.forEach((game)=> {
-             this.dbGames.add(game);
-             });
+                        localStorage.setItem("dbGames", this.dbGames.toJSON());
+                        let lastUpdate = new Date();
+                        localStorage.setItem("lastDBUpdate", lastUpdate.valueOf().toString());
+                        this.lastDBUpdate = lastUpdate;
+                    },
+                    error : () => {
+                        alert("Fehler beim Herunterladen der Spieleliste!");
+                    }
+                });
+            }
+        }
 
-             localStorage.setItem("dbGames", this.dbGames.toJSON());
-             },
-             error : ()=> {
-             //alert("Fehler beim Herunterladen der Spielerliste!");
-             }
-             });*/
+        public reset() {
+            localStorage.clear();
+            window.document.location.reload();
         }
 
 

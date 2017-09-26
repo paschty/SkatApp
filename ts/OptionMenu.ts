@@ -18,8 +18,14 @@ namespace SkatApp {
             
             this.getContainer().find("#save").click(()=>{
                 this.getModel().setDatabase(this.getDBFromForm());
-                this.getModel().updatePlayerList();
-                this.getModel().updateGroups();
+                this.getModel().updateFromServer();
+            });
+
+            this.getContainer().find("#reset").click(()=>{
+                let reset = window.confirm("Reset?");
+                if(reset){
+                    this.getModel().reset();
+                }
             });
 
             this.getContainer().find("#skatDB").val(this.getModel().getDatabase());
