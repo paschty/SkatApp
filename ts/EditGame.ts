@@ -306,7 +306,7 @@ namespace SkatApp {
 
             game.bid = 18;
             game.announcement = 1;
-            game.createDate = new Date().getDate();
+            game.createDate = new Date().valueOf();
             game.gameLevel = 1;
             game.gameType = 9;
             game.group = this.getModel().groups.get(0);
