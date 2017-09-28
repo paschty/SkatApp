@@ -35,8 +35,6 @@ namespace SkatApp {
         private view: boolean = false;
 
         activate(currentArguments: string[]) {
-            this.getContainer().find("input").attr("disabled", "false");
-
             console.log(currentArguments);
 
             let container = this.getContainer();
@@ -44,17 +42,13 @@ namespace SkatApp {
             let model = this.getModel();
 
             selects.material_select('destroy');
+            this.getContainer().find("input").removeAttr("disabled");
 
             let index = null;
+            this.view = currentArguments.length == 2;
             if (currentArguments.length > 0) {
                 index = ((<any>currentArguments[ 0 ]) * 1);
-                this.view = currentArguments.length == 2;
-                if (this.view) {
-                    model.currentGame = model.dbGames.get(index);
-                } else {
-                    model.currentGame = model.localGames.get(index);
-                }
-
+                model.currentGame = this.view ? model.dbGames.get(index) :  model.localGames.get(index);
             } else {
                 model.currentGame = this.createNewGame();
             }
@@ -213,7 +207,8 @@ namespace SkatApp {
             this.getAnnouncementElement().val(currentGame.announcement);
             this.getJacksElement().val(currentGame.jacks);
             this.updateGameLevel(currentGame.gameLevel);
-            this.getGamePointsElement().val(currentGame.value);
+            this.getGamePointsElement().val(currentGame.bid != 0 ? currentGame.value :
+                (currentGame.gameLevel != 2 ? currentGame.value * currentGame.gameLevel : 240));
             this.getWonElement().prop("checked", currentGame.won);
 
             return currentGame;

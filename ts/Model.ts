@@ -21,7 +21,6 @@ namespace SkatApp {
 
     export class SkatAppModel {
 
-        private static SETTINGS = [ "server" ];
         public players: SAArrayList<string>;
         public groups: SAArrayList<string>;
 
@@ -174,25 +173,46 @@ namespace SkatApp {
             }
         }
 
-        public updateGameList() {
-            if (this.settingsObject.server != null && this.settingsObject.server.length > 0) {
-                jQuery.ajax({
-                    url : this.settingsObject.server + "/JSON/games", success : (result: Array<Game>) => {
-                        this.dbGames.clear();
-                        result.forEach((game) => {
-                            this.dbGames.add(game);
-                        });
-
-                        localStorage.setItem("dbGames", this.dbGames.toJSON());
-                        let lastUpdate = new Date();
-                        localStorage.setItem("lastDBUpdate", lastUpdate.valueOf().toString());
-                        this.lastDBUpdate = lastUpdate;
-                    },
-                    error : () => {
-                        alert("Fehler beim Herunterladen der Spieleliste!");
-                    }
-                });
+        public updateGameList():JQueryPromise<any> {
+            if (this.settingsObject.server == null || this.settingsObject.server.length <= 0) {
+                return $.Deferred((dfd) => dfd.reject('Server nicht konfiguriert!')).promise();
             }
+            return jQuery.ajax({
+                url : this.settingsObject.server + "/JSON/games", success : (result: Array<Game>) => {
+                    this.dbGames.clear();
+                    result.forEach((game) => {
+                        this.dbGames.add(game);
+                    });
+
+                    localStorage.setItem("dbGames", this.dbGames.toJSON());
+                    let lastUpdate = new Date();
+                    localStorage.setItem("lastDBUpdate", lastUpdate.valueOf().toString());
+                    this.lastDBUpdate = lastUpdate;
+                },
+                error : () => {
+                    alert("Fehler beim aktualisieren der Spieleliste!");
+                }
+            });
+        }
+
+        public upload():JQueryPromise<any> {
+            if (this.settingsObject.server == null || this.settingsObject.server.length <= 0) {
+                return $.Deferred((dfd) => dfd.reject('Server nicht konfiguriert!')).promise();
+            }
+            return jQuery.ajax({
+                url: this.settingsObject.server + "/JSON/games",
+                type: 'POST',
+                crossDomain : true,
+                data : {
+                    games : this.localGames.toJSON()
+                },
+                dataType : 'json'
+            });
+        }
+
+        public removeLocalGames() {
+            this.localGames.clear();
+            this.syncGamesToStorage();
         }
 
         public reset() {

@@ -47,7 +47,7 @@ namespace SkatApp {
 
         public forEachReverse(fn:(element:T, index:number, size:SAArrayList<T>)=>void){
             let length = this.base.length-1;
-            for(var i = length; i >=0;i--){
+            for(let i = length; i >=0;i--){
                 fn(this.base[i], i, this);
             }
         }
@@ -62,7 +62,7 @@ namespace SkatApp {
 
         public clear():void {
             let oldBase = this.base;
-            this.base = new Array();
+            this.base = [];
             oldBase.forEach((element, position)=> {
                 this.listeners.forEach((listener)=> {
                     listener.itemRemoved(position, element);

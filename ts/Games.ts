@@ -24,8 +24,11 @@ namespace SkatApp {
 
         activate(currentArguments: string[]) {
             window.scrollTo(0,0);
-            if (currentArguments.length == 2) {
-                var [ action, which ] = currentArguments;
+            let uploadGamesButton = this.getContainer().find("#uploadGames");
+            this.getModel().localGames.size() > 0 ? uploadGamesButton.removeClass("disabled") :
+                uploadGamesButton.addClass("disabled");
+            if (currentArguments.length != 0) {
+                let [ action, which ] = currentArguments;
                 switch (action) {
                     case "delete":
                         if (window.confirm("Spiel löschen?")) {
@@ -33,7 +36,26 @@ namespace SkatApp {
                             this.getModel().syncGamesToStorage();
                         }
                         window.location.hash = "#games";
-                        break
+                        break;
+                    case "upload":
+                        let uploadDiv = this.getContainer().find("#uploadProgress");
+                        uploadDiv.removeClass("hiddendiv");
+                        uploadGamesButton.addClass("disabled");
+                        this.getModel().upload().done(() => {
+                            this.getModel().removeLocalGames();
+                            this.getModel().updateGameList().always(() => {
+                                alert("Upload erfolgreich!");
+                                uploadDiv.addClass("hiddendiv");
+                                this.refreshList();
+                                window.location.hash = "#games";
+                            });
+                        })
+                        .fail((error) => {
+                           alert(error);
+                            uploadDiv.addClass("hiddendiv");
+                            window.location.hash = "#games";
+                        });
+                        break;
                 }
             }
         }
@@ -55,25 +77,22 @@ namespace SkatApp {
                     won.text("Verloren " + dbGame.value);
                     currentGameTemplate.addClass("lost");
                 }
-
                 currentGameTemplate.attr("onclick", "document.location.hash=\"#game_edit;" + i + "\"");
                 currentGameTemplate.find(".delete").attr("onclick", "event.cancelBubble=true;document.location.hash=\"#games;delete;" + i + "\"");
                 htmlArr.push(currentGameTemplate.wrap("<div></div>").parent().html());
-
                 return true;
             });
 
             this.getModel().dbGames.forEachReverse((dbGame, i, arr) => {
-                if (i > 100) {
+                if (i < (arr.size() - 50)) {
                     return;
                 }
-
                 let currentGameTemplate = this.oneGameTemplate.clone();
                 currentGameTemplate.attr("data-gameID", i + "");
                 currentGameTemplate.find(".title").text(dbGame.player);
                 currentGameTemplate.find(".gameImage").attr("src", "img/" + dbGame.gameType + ".svg");
                 currentGameTemplate.find(".group").text(dbGame.group);
-                currentGameTemplate.addClass("old")
+                currentGameTemplate.addClass("old");
                 let won = currentGameTemplate.find(".wonText");
                 if (dbGame.won) {
                     won.text("Gewonnen +" + dbGame.value);

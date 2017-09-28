@@ -53,14 +53,10 @@
                     <label for="skatDB" class="active">SkatDB</label>
                 </div>
             </div>
-            <div class="row">
+            <div class="row ">
                 <div class="col s12">
                     <a id="test" class="waves-effect waves-light btn light-green darken-3">Test</a>
                     <a id="save" class="waves-effect waves-light btn light-green darken-3">Speichern</a>
-                </div>
-            </div>
-            <div class="row ">
-                <div class="col s12">
                     <a id="reset" class="waves-effect waves-light btn red">Reset</a>
                 </div>
             </div>
@@ -137,8 +133,16 @@
                 </nav>
             </div>
             <div class="row">
-                <a href="#game_edit" class="waves-effect waves-light btn col s12 light-green darken-3">Spiel
-                    hinzufügen</a>
+                <div class="col s6">
+                    <a href="#game_edit" class="waves-effect waves-light btn col s12 light-green darken-2">hinzufügen</a>
+                </div>
+                <div class="col s6">
+                    <a id="uploadGames" href="#games;upload"
+                       class="waves-effect waves-light btn col s12 light-blue darken-3 disabled">hochladen</a>
+                    <div class="progress hiddendiv" id="uploadProgress">
+                        <div class="indeterminate"></div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <ul id="gamelist" class="collection">
