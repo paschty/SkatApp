@@ -1,0 +1,22 @@
+CACHE MANIFEST
+SkatApp.js
+app.html
+img/10.svg
+img/11.svg
+img/12.svg
+img/24.svg
+img/9.svg
+lib/fonts/material/MaterialIcons-Regular.woff2
+lib/fonts/material/material-icons.css
+lib/fonts/roboto/Roboto-Bold.woff2
+lib/fonts/roboto/Roboto-Light.woff2
+lib/fonts/roboto/Roboto-Medium.woff2
+lib/fonts/roboto/Roboto-Regular.woff2
+lib/fonts/roboto/Roboto-Thin.woff2
+lib/jquery/jquery.min.js
+lib/materialize/materialize.min.css
+lib/materialize/materialize.min.js
+style.css
+#66dd70d835aac497bb4a8164e073818e
+NETWORK:
+*
