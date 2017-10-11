@@ -7,7 +7,6 @@ namespace SkatApp {
         }
 
         private template: JQuery = this.buildTemplate("game_edit");
-        private editedGame: Game;
         private currentRamsch: boolean = false;
 
         private gameLevelNormal = {
@@ -116,6 +115,7 @@ namespace SkatApp {
             this.getSaveGameButton().click(() => {
                 if (!this.view) {
                     let game = this.gameFromView();
+                    game.modifyDate = new Date().valueOf();
 
                     if (index == null) {
                         this.getModel().localGames.add(game);
@@ -173,8 +173,8 @@ namespace SkatApp {
         private fillGameLevel(gameLevelElement: JQuery, gameLevelObj: any) {
             (<any>jQuery(gameLevelElement)).material_select('destroy');
             gameLevelElement.children().remove();
-            for (var value in gameLevelObj) {
-                var text = gameLevelObj[ value ];
+            for (let value in gameLevelObj) {
+                let text = gameLevelObj[ value ];
                 jQuery("<option value='" + value + "'>" + text + "</option>").appendTo(gameLevelElement);
             }
             (<any>gameLevelElement).material_select();
