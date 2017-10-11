@@ -21,6 +21,6 @@
     "copy:materializecss": "cpx \"node_modules/materialize-css/dist/css/materialize.min.css\" lib/materialize/",
     "copy:materializefonts": "cpx \"node_modules/materialize-css/dist/fonts/roboto/*\" lib/fonts/roboto/",
     "copy:materialiconsfonts": "cpx \"node_modules/material-design-icons/iconfont/*\" lib/fonts/material/",
-    "create:appcache": "appcache-manifest \"./app.html\" \"./SkatApp.js\" \"./style.css\" \"./lib/**/*.{css,js,woff2}\" \"./icons/*.{svg,png}\" \"./img/*.{svg,png}\" --network-star --prefix -o ./SkatApp.appcache"
+    "create:appcache": "appcache-manifest \"./index.html\" \"./SkatApp.js\" \"./style.css\" \"./lib/**/*.{css,js,woff2}\" \"./icons/*.{svg,png}\" \"./img/*.{svg,png}\" --network-star --prefix -o ./SkatApp.appcache"
   }
 }
