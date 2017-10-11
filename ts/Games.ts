@@ -64,19 +64,7 @@ namespace SkatApp {
             let gameList = this.getContainer().find("#gamelist");
             let htmlArr = [];
             this.getModel().localGames.forEachReverse((dbGame, i, arr) => {
-                let currentGameTemplate = this.oneGameTemplate.clone();
-                currentGameTemplate.attr("data-gameID", i + "");
-                currentGameTemplate.find(".title").text(dbGame.player);
-                currentGameTemplate.find(".gameImage").attr("src", "img/" + dbGame.gameType + ".svg");
-                currentGameTemplate.find(".group").text(dbGame.group);
-                let won = currentGameTemplate.find(".wonText");
-                if (dbGame.won) {
-                    won.text("Gewonnen +" + dbGame.value);
-                    currentGameTemplate.addClass("won");
-                } else {
-                    won.text("Verloren " + dbGame.value);
-                    currentGameTemplate.addClass("lost");
-                }
+                let currentGameTemplate = this.renderGame(i, dbGame);
                 currentGameTemplate.attr("onclick", "document.location.hash=\"#game_edit;" + i + "\"");
                 currentGameTemplate.find(".delete").attr("onclick", "event.cancelBubble=true;document.location.hash=\"#games;delete;" + i + "\"");
                 htmlArr.push(currentGameTemplate.wrap("<div></div>").parent().html());
@@ -87,21 +75,9 @@ namespace SkatApp {
                 if (i < (arr.size() - 50)) {
                     return;
                 }
-                let currentGameTemplate = this.oneGameTemplate.clone();
-                currentGameTemplate.attr("data-gameID", i + "");
-                currentGameTemplate.find(".title").text(dbGame.player);
-                currentGameTemplate.find(".gameImage").attr("src", "img/" + dbGame.gameType + ".svg");
-                currentGameTemplate.find(".group").text(dbGame.group);
-                currentGameTemplate.addClass("old");
-                let won = currentGameTemplate.find(".wonText");
-                if (dbGame.won) {
-                    won.text("Gewonnen +" + dbGame.value);
-                    currentGameTemplate.addClass("won");
-                } else {
-                    won.text("Verloren " + dbGame.value);
-                    currentGameTemplate.addClass("lost");
-                }
+                let currentGameTemplate = this.renderGame(i, dbGame);
 
+                currentGameTemplate.addClass("old");
                 currentGameTemplate.find(".delete").detach();
                 currentGameTemplate.attr("onclick", "document.location.hash=\"#game_edit;" + i + ";view\"");
 
@@ -110,6 +86,33 @@ namespace SkatApp {
             });
 
             gameList[ 0 ].innerHTML = htmlArr.join("");
+        }
+
+        private renderGame(i, dbGame) {
+            let currentGameTemplate = this.oneGameTemplate.clone();
+            currentGameTemplate.attr("data-gameID", i + "");
+            currentGameTemplate.find(".title").text(dbGame.player);
+            currentGameTemplate.find(".gameImage").attr("src", "img/" + dbGame.gameType + ".svg");
+            currentGameTemplate.find(".group").text(dbGame.group);
+            let modified = new Date(dbGame.modifyDate);
+            currentGameTemplate.find(".modified").text(`${this.getDayAsString(modified)}.${this.getMonthAsString(modified)}.${modified.getFullYear()}`);
+            let won = currentGameTemplate.find(".wonText");
+            if (dbGame.won) {
+                won.text("Gewonnen +" + dbGame.value);
+                currentGameTemplate.addClass("won");
+            } else {
+                won.text("Verloren " + dbGame.value);
+                currentGameTemplate.addClass("lost");
+            }
+            return currentGameTemplate;
+        }
+
+        private getMonthAsString(modified: Date) {
+            return modified.getMonth() < 9 ? '0' + modified.getMonth() + 1 : modified.getMonth() + 1;
+        }
+
+        private getDayAsString(modified: Date) {
+            return modified.getDate() < 10 ? '0' + modified.getDate() : modified.getDate();
         }
 
         private template: JQuery = this.buildTemplate("games");

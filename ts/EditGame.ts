@@ -8,6 +8,7 @@ namespace SkatApp {
 
         private template: JQuery = this.buildTemplate("game_edit");
         private currentRamsch: boolean = false;
+        private lastSelectedGroup = null;
 
         private gameLevelNormal = {
             "1" : "Normal (+1)",
@@ -123,7 +124,7 @@ namespace SkatApp {
                         this.getModel().localGames.remove(index);
                         this.getModel().localGames.add(game, index);
                     }
-
+                    this.lastSelectedGroup = game.group;
                     this.getModel().syncGamesToStorage();
                 }
             });
@@ -309,7 +310,7 @@ namespace SkatApp {
             game.createDate = new Date().valueOf();
             game.gameLevel = 1;
             game.gameType = 9;
-            game.group = this.getModel().groups.get(0);
+            game.group = this.lastSelectedGroup || this.getModel().groups.get(0);
             game.player = this.getModel().players.get(0);
             game.hand = false;
             game.jacks = 1;
