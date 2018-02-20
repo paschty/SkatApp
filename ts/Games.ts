@@ -108,7 +108,7 @@ namespace SkatApp {
         }
 
         private getMonthAsString(modified: Date) {
-            return modified.getMonth() < 9 ? '0' + modified.getMonth() + 1 : modified.getMonth() + 1;
+            return modified.getMonth() < 9 ? '0' + (modified.getMonth() + 1) : modified.getMonth() + 1;
         }
 
         private getDayAsString(modified: Date) {
