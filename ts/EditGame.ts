@@ -211,6 +211,7 @@ namespace SkatApp {
             this.getGamePointsElement().val(currentGame.bid != 0 ? currentGame.value :
                 (currentGame.gameLevel != 2 ? currentGame.value * currentGame.gameLevel : 240));
             this.getWonElement().prop("checked", currentGame.won);
+            this.getCreateDate().val(currentGame.createDate);
 
             return currentGame;
         }
@@ -229,7 +230,8 @@ namespace SkatApp {
                 announcement : parseInt(this.getAnnouncementElement().val(), 10),
                 gameLevel : parseInt(this.getGameLevelElement().val(), 10),
                 jacks : parseInt(this.getJacksElement().val(), 10),
-                won : this.getWonElement().prop("checked")
+                won : this.getWonElement().prop("checked"),
+                createDate : parseInt(this.getCreateDate().val(),10)
             };
             if (game.bid === 0) {
                 game.won = game.gameLevel > 0;
@@ -276,6 +278,10 @@ namespace SkatApp {
 
         private getSaveGameButton() {
             return this.getContainer().find("#saveGame");
+        }
+
+        private getCreateDate() {
+            return this.getContainer().find("#createDate");
         }
 
         private getPoints(game: Game): number {
